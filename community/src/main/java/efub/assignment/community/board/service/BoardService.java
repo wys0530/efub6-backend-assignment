@@ -59,6 +59,17 @@ public class BoardService {
         return BoardGetResponse.from(board, canEdit);
     }
 
+    @Transactional
+    public void deleteBoard(Long boardId, Long memberId) {
+        Board board = findByBoardId(boardId);
+
+        // 현재 요청자가 게시판 주인인지 확인
+        if (!board.getOwner().getMemberId().equals(memberId)) {
+            throw new CustomException(ErrorCode.BOARD_ACCESS_DENIED);
+        }
+
+        boardRepository.delete(board);
+    }
 
     public Board findByBoardId(Long boardId) {
         return boardRepository.findById(boardId)
