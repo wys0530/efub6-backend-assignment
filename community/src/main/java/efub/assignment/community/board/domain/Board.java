@@ -39,4 +39,8 @@ public class Board extends BaseEntity {
         this.owner = owner;
     }
 
+    public void changeOwner(Member newOwner){
+        this.owner = newOwner;
+    }
+
 }

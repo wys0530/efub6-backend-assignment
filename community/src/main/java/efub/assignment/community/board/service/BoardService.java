@@ -2,7 +2,9 @@ package efub.assignment.community.board.service;
 
 import efub.assignment.community.board.domain.Board;
 import efub.assignment.community.board.dto.request.BoardCreateRequest;
+import efub.assignment.community.board.dto.request.BoardOwnerUpdateRequest;
 import efub.assignment.community.board.dto.response.BoardCreateResponse;
+import efub.assignment.community.board.dto.response.BoardOwnerUpdateResponse;
 import efub.assignment.community.board.repository.BoardRepository;
 import efub.assignment.community.global.exception.CustomException;
 import efub.assignment.community.global.exception.ErrorCode;
@@ -27,6 +29,23 @@ public class BoardService {
 
         boardRepository.save(newBoard);
         return BoardCreateResponse.from(newBoard);
+    }
+
+    @Transactional
+    public BoardOwnerUpdateResponse changeBoardOwner(Long authMemberId, Long boardId, BoardOwnerUpdateRequest request) {
+        Board board = findByBoardId(boardId);
+
+        // 현재 요청자가 게시판 주인인지 확인
+        if (!board.getOwner().getMemberId().equals(authMemberId)) {
+            throw new CustomException(ErrorCode.BOARD_ACCESS_DENIED);
+        }
+
+        // 새 주인이 될 멤버 조회
+        Member newOwner = memberService.findByMemberId(request.getMemberId());
+
+        board.changeOwner(newOwner);
+
+        return BoardOwnerUpdateResponse.from(board);
     }
 
 //    @Transactional(readOnly = true)
