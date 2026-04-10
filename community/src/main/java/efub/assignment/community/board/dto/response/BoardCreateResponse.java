@@ -27,7 +27,7 @@ public class BoardCreateResponse {
                 .notice(board.getNotice())
                 .ownerNickname(board.getOwner().getNickname())
                 .createdAt(board.getCreatedAt())
-                .updatedAt(board.getModifiedAt())
+                .updatedAt(board.getUpdatedAt())
                 .build();
     }
 }

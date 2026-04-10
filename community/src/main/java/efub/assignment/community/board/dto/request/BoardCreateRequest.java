@@ -3,7 +3,6 @@ package efub.assignment.community.board.dto.request;
 import efub.assignment.community.member.domain.Member;
 import efub.assignment.community.board.domain.Board;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
