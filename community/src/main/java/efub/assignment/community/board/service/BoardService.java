@@ -4,6 +4,7 @@ import efub.assignment.community.board.domain.Board;
 import efub.assignment.community.board.dto.request.BoardCreateRequest;
 import efub.assignment.community.board.dto.request.BoardOwnerUpdateRequest;
 import efub.assignment.community.board.dto.response.BoardCreateResponse;
+import efub.assignment.community.board.dto.response.BoardGetResponse;
 import efub.assignment.community.board.dto.response.BoardOwnerUpdateResponse;
 import efub.assignment.community.board.repository.BoardRepository;
 import efub.assignment.community.global.exception.CustomException;
@@ -48,15 +49,16 @@ public class BoardService {
         return BoardOwnerUpdateResponse.from(board);
     }
 
-//    @Transactional(readOnly = true)
-//    public BoardCreateResponse getBoard(Long boardId, Long memberId) {
-//        Board board = findByBoardId(boardId);
-//        Member member = memberService.findByMemberId(memberId);
-//
-//        boolean canEdit = board.getOwner().equals(member);
-//
-//        return BoardCreateResponse.from(board, canEdit);
-//    }
+    @Transactional(readOnly = true)
+    public BoardGetResponse getBoard(Long boardId, Long memberId) {
+        Board board = findByBoardId(boardId);
+        Member member = memberService.findByMemberId(memberId);
+
+        boolean canEdit = board.getOwner().getMemberId().equals(member.getMemberId());
+
+        return BoardGetResponse.from(board, canEdit);
+    }
+
 
     public Board findByBoardId(Long boardId) {
         return boardRepository.findById(boardId)

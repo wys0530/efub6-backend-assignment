@@ -3,6 +3,7 @@ package efub.assignment.community.board.controller;
 import efub.assignment.community.board.dto.request.BoardCreateRequest;
 import efub.assignment.community.board.dto.request.BoardOwnerUpdateRequest;
 import efub.assignment.community.board.dto.response.BoardCreateResponse;
+import efub.assignment.community.board.dto.response.BoardGetResponse;
 import efub.assignment.community.board.dto.response.BoardOwnerUpdateResponse;
 import efub.assignment.community.board.service.BoardService;
 import jakarta.validation.Valid;
@@ -42,5 +43,16 @@ public class BoardController {
 
         return ResponseEntity.ok(response);
     }
+
+    // 게시판 조회
+    @GetMapping("/{boardId}")
+    public ResponseEntity<BoardGetResponse> getBoard(
+            @RequestHeader("Auth-id") Long memberId,
+            @PathVariable Long boardId
+    ) {
+        BoardGetResponse response = boardService.getBoard(boardId, memberId);
+        return ResponseEntity.ok(response);
+    }
+
 
 }
