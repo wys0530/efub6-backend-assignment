@@ -1,0 +1,48 @@
+package efub.assignment.community.board.service;
+
+import efub.assignment.community.board.domain.Board;
+import efub.assignment.community.board.dto.request.BoardCreateRequest;
+import efub.assignment.community.board.dto.response.BoardCreateResponse;
+import efub.assignment.community.board.repository.BoardRepository;
+import efub.assignment.community.global.exception.CustomException;
+import efub.assignment.community.global.exception.ErrorCode;
+import efub.assignment.community.member.domain.Member;
+import efub.assignment.community.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class BoardService {
+
+    private final MemberService memberService;
+    private final BoardRepository boardRepository;
+
+    @Transactional
+    public BoardCreateResponse createBoard(Long memberId, BoardCreateRequest request){
+        Member owner = memberService.findByMemberId(memberId);
+
+        Board newBoard = request.toEntity(owner);
+
+        boardRepository.save(newBoard);
+        return BoardCreateResponse.from(newBoard);
+    }
+
+//    @Transactional(readOnly = true)
+//    public BoardCreateResponse getBoard(Long boardId, Long memberId) {
+//        Board board = findByBoardId(boardId);
+//        Member member = memberService.findByMemberId(memberId);
+//
+//        boolean canEdit = board.getOwner().equals(member);
+//
+//        return BoardCreateResponse.from(board, canEdit);
+//    }
+
+    public Board findByBoardId(Long boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+    }
+}
+
+
