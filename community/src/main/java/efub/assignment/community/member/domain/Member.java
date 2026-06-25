@@ -36,13 +36,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    //생성일
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
-    //수정일
-    @Column
-    private LocalDateTime updatedAt;
 
     @Builder
     public Member(Long studentId, String university, String nickname, String email, String password) {
